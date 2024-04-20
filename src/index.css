@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .align-element {
+    @apply max-w-[1200px] w-full px-5 mx-auto;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+  background: url(/public/images/istockphoto-1463371608-2048x2048.jpg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+
+  font-family: "Poppins", sans-serif;
+}
