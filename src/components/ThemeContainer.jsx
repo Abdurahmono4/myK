@@ -1,78 +1,63 @@
-import { FaSun, FaMoon } from "react-icons/fa6";
-import { useState, useEffect, useContext } from "react";
+import { FaSun, FaMoon } from "react-icons/fa";
+
+import { useContext, useEffect, useState } from "react";
 import { GlobalContext } from "../context/useGlobalContext";
-const colors = ["#8DECB4", "#F0EBE3", "#59D5E0"];
 
-const themes = { winter: "winter", dracula: "dracula" };
+const colors = ["#8DECB4", "#76ABAE", "#59D5E0"];
 
-function darkModeFromLocalStorage() {
+const themes = {
+  winter: "winter",
+  dracula: "dracula",
+};
+
+function darkModeFromLocalStoage() {
   return localStorage.getItem("mode") || themes.winter;
 }
 
 function ThemeContainer() {
-  const [theme, setTheme] = useState(darkModeFromLocalStorage());
-  console.log(theme);
-
+  const [theme, setTheme] = useState(darkModeFromLocalStoage);
   const handleClick = () => {
     const newTheme = theme == themes.winter ? themes.dracula : themes.winter;
     setTheme(newTheme);
     localStorage.setItem("mode", newTheme);
   };
-
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
-    localStorage.setItem("mode", theme);
-    window.localStorage.setItem("mode", theme);
-    window.localStorage.setItem("theme", theme);
-
-    // Apply background style for dracula theme
-    if (theme === themes.dracula) {
-      document.body.style.backgroundColor = "rgba(0,0,0,0.67)";
-      document.body.style.color = "white";
-      // document.body.backgroundColor = "dark";
-    } else {
-      document.body.style.backgroundColor = "";
-      document.body.style.color = ""; // Reset for winter theme
-    }
   }, [theme]);
 
-  const { color } = useContext(GlobalContext);
   const { dispatch } = useContext(GlobalContext);
-
   const changeColor = (color) => {
-    dispatch({ type: "CHANGE_COLOR", payload: color });
+    dispatch({
+      type: "CHANGE_NAVBAR_BG",
+      payload: color,
+    });
   };
   return (
-    <div className="mb-10 py-3" key={color} onClick={() => changeColor}>
-      <div className="align-element flex justify-between items-center">
-        {/*colors*/}
-        <div className=" flex flex-row gap-2 cursor-pointer">
+    <div className="mb-10 py-3">
+      <div className="align-element  flex justify-between items-center">
+        {/*colors */}
+        <div className="flex flex-row gap-2">
           {colors.map((color) => {
             return (
               <div
                 key={color}
-                className="w-10 h-10 rounded-full bg-gray-200 rounded-full flex"
-                style={{ backgroundColor: color }}
                 onClick={() => changeColor(color)}
+                className="h-7 w-7 rounded-full cursor-pointer"
+                style={{ backgroundColor: color }}
               ></div>
             );
           })}
         </div>
-        {/*themes*/}
+        {/* theme */}
         <div>
           <label className="swap swap-rotate">
             {/* this hidden checkbox controls the state */}
-            <input
-              type="checkbox"
-              onClick={handleClick}
-              defaultChecked={theme == "winter" ? false : true}
-            />
+            <input type="checkbox" onClick={handleClick} />
 
             {/* sun icon */}
-            <FaSun className="swap-on fill-current w-7 h-7 " />
-
+            <FaSun className="swap-on fill-current w-7 h-7" />
             {/* moon icon */}
-            <FaMoon className="swap-off fill-current w-7 h-7 " />
+            <FaMoon className="swap-off fill-current w-7 h-7" />
           </label>
         </div>
       </div>

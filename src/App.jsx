@@ -27,7 +27,7 @@ import { auth } from "./firebase/fireBaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
 
 function App() {
-  const { user } = useContext(GlobalContext);
+  const { user, dispatch, authChange } = useContext(GlobalContext);
   const routes = createBrowserRouter([
     {
       path: "/",
@@ -64,11 +64,14 @@ function App() {
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        console.log(user);
+        dispatch({ type: "SIGN_IN", payload: user });
       }
     });
+    dispatch({
+      type: "AUTH_CHANGE",
+    });
   }, []);
-  return <RouterProvider router={routes} />;
+  return <div>{authChange && <RouterProvider router={routes} />}</div>;
 }
 
 export default App;

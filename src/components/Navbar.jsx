@@ -1,15 +1,29 @@
 import { Link } from "react-router-dom";
 import NavLinks from "./NavLinks";
+
 import { useContext } from "react";
 import { GlobalContext } from "../context/useGlobalContext";
 
+import { signOut } from "firebase/auth";
+import { auth } from "../firebase/fireBaseConfig";
+
 function Navbar() {
-  const { navbarBgColor } = useContext(GlobalContext);
+  const { navbarBgColor, user } = useContext(GlobalContext);
   console.log("navbar color:", navbarBgColor);
+
+  const signOutFunc = () => {
+    signOut(auth)
+      .then(() => {
+        console.log("Sign out");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <div
       className="bg-base-300 duration-300 transition"
-      onClick={() => dispatch({ type: "CHANGE_COLOR", payload: "red" })}
       style={{ backgroundColor: navbarBgColor }}
     >
       <div className="navbar align-element">
@@ -37,6 +51,7 @@ function Navbar() {
           <NavLinks />
         </div>
         <div className="navbar-end">
+          {user && <p className="mr-3">{user.displayName}</p>}
           <div className="dropdown dropdown-end">
             <div
               tabIndex={0}
@@ -45,8 +60,8 @@ function Navbar() {
             >
               <div className="w-10 rounded-full">
                 <img
-                  alt="Tailwind CSS Navbar component"
-                  src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
+                  alt={`${user.displayName ?? "user"}image`}
+                  src={user.photoURL}
                 />
               </div>
             </div>
@@ -55,7 +70,9 @@ function Navbar() {
               className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52"
             >
               <li>
-                <a>Logout</a>
+                <button onClick={signOutFunc} className="btn btn-sm">
+                  Logout
+                </button>
               </li>
             </ul>
           </div>

@@ -8,6 +8,8 @@ const changeState = (state, action) => {
       return { ...state, navbarBgColor: action.payload };
     case "SIGN_IN":
       return { ...state, user: action.payload };
+    case "AUTH_CHANGE":
+      return { ...state, authChange: true };
     default:
       return state;
   }
